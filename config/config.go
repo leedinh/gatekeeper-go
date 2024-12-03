@@ -7,8 +7,11 @@ import (
 
 // Config defines the config for the application.
 type Config struct {
-	ServerPort string
-	JWTSecret  string
+	ServerPort   string
+	JWTSecret    string
+	RedisAddr    string
+	RateLimit    int
+	RateLimitTTl int
 }
 
 func getEnv(key string, defaultValue string) string {
@@ -32,7 +35,10 @@ func getEnvInt(key string, defaultValue int) int {
 
 func LoadConfig() Config {
 	return Config{
-		ServerPort: getEnv("SERVER_PORT", "8080"),
-		JWTSecret:  getEnv("JWT_SECRET", "secret"),
+		ServerPort:   getEnv("SERVER_PORT", "8080"),
+		JWTSecret:    getEnv("JWT_SECRET", "secret"),
+		RedisAddr:    getEnv("REDIS_ADDR", "localhost:6379"),
+		RateLimit:    getEnvInt("RATE_LIMIT", 10),
+		RateLimitTTl: getEnvInt("RATE_LIMIT_TTL", 60),
 	}
 }
