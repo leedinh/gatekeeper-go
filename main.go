@@ -4,10 +4,12 @@ import (
 	"log"
 
 	"github.com/labstack/echo/v4"
+	"github.com/leedinh/gatekeeper-go/config"
 	"github.com/leedinh/gatekeeper-go/middleware"
 )
 
 func main() {
+	conf := config.LoadConfig()
 	e := echo.New()
 
 	// Public routes
@@ -25,6 +27,6 @@ func main() {
 		return c.String(200, "Limited route")
 	})
 
-	log.Println("Server started at :8080")
-	e.Logger.Fatal(e.Start(":8080"))
+	log.Printf("Server started at %s\n", conf.ServerPort)
+	e.Logger.Fatal(e.Start(":" + conf.ServerPort))
 }

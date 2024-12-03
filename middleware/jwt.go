@@ -6,6 +6,7 @@ import (
 
 	"github.com/golang-jwt/jwt/v5"
 	"github.com/labstack/echo/v4"
+	"github.com/leedinh/gatekeeper-go/config"
 )
 
 // JWTConfig defines the config for JWT middleware.
@@ -18,7 +19,7 @@ func JWTMiddleware(next echo.HandlerFunc) echo.HandlerFunc {
 
 		token := strings.TrimPrefix(authHeader, "Bearer ")
 		_, err := jwt.Parse(token, func(token *jwt.Token) (interface{}, error) {
-			return []byte("secret"), nil
+			return []byte(config.LoadConfig().JWTSecret), nil
 		})
 
 		if err != nil {
