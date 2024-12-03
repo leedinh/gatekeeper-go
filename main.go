@@ -1,16 +1,30 @@
 package main
 
 import (
-	"fmt"
 	"log"
-	"net/http"
+
+	"github.com/labstack/echo/v4"
+	"github.com/leedinh/gatekeeper-go/middleware"
 )
 
 func main() {
-	http.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
-		fmt.Fprintf(w, "Hello, World!")
+	e := echo.New()
+
+	// Public routes
+	e.GET("/", func(c echo.Context) error {
+		return c.String(200, "Hello, World!")
 	})
 
-	log.Println("Server started on: http://localhost:8080")
-	log.Fatal(http.ListenAndServe(":8080", nil))
+	// Secure routes
+	e.GET("/secure", middleware.JWTMiddleware(func(c echo.Context) error {
+		return c.String(200, "Secure route")
+	}))
+
+	// Limited routes
+	e.GET("/limited", func(c echo.Context) error {
+		return c.String(200, "Limited route")
+	})
+
+	log.Println("Server started at :8080")
+	e.Logger.Fatal(e.Start(":8080"))
 }
