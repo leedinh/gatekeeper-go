@@ -12,6 +12,8 @@ type Config struct {
 	RedisAddr    string
 	RateLimit    int
 	RateLimitTTl int
+	LeakRate    int
+	LeakyBucketCapacity int
 }
 
 func getEnv(key string, defaultValue string) string {
@@ -40,5 +42,7 @@ func LoadConfig() Config {
 		RedisAddr:    getEnv("REDIS_ADDR", "localhost:6379"),
 		RateLimit:    getEnvInt("RATE_LIMIT", 10),
 		RateLimitTTl: getEnvInt("RATE_LIMIT_TTL", 60),
+		LeakRate:    getEnvInt("LEAK_RATE", 1),
+		LeakyBucketCapacity: getEnvInt("LEAKY_BUCKET_CAPACITY", 10),
 	}
 }
